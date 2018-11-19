@@ -3,10 +3,17 @@ $(document).ready(function () {
     $("#email_form").validate(
         {
             rules: {
-                email_1: {required: true, email: true},
-                email_2: {required: true, email: true, equalTo: "#email_1"},
-                last_name: {required: true},
-                first_name: {required: true},
+                email: {
+                    required: true,
+                    email: true
+                },
+                email2: {
+                    required: true,
+                    email: true,
+                    equalTo: "#email"
+                },
+                lname: {required: true},
+                fname: {required: true},
                 state: {
                     required: true,
                     rangelength: [2, 2],
@@ -21,11 +28,9 @@ $(document).ready(function () {
 
             },
             messages: {
-                email_2: {equalTo: "email must match"},
-                state: {rangelength: "please use 2 letter code"},
-                zip: {digits: "please give a 5 digit code", rangelength: "please give a 5 digit code"}
+                email2: {equalTo: "Email must match previous email."},
 
-
+                }
             }
         }
     )

@@ -1,228 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--
+        CP 1290 Final Project
+        Prepared by: Emma Troke
+				   : Gabe Walsh
+        Submit Date: 11 / 23 / 18
+
+        Filename: index.html
+     -->
     <meta charset="UTF-8">
     <title>Gemma Games</title>
+    <link href = "projectStyle.css" rel = "stylesheet" type = "text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 </head>
 <body>
-<div>
-    <canvas id="canvas" width="1500" height="1500" >
-    </canvas>
-    <button id="btn">START</button>
+<div class ="header">
+    <header>
+        <img src = "logo1.png" alt = "Snake Logo" id = "logo" />
+    </header>
 
-<script>
-    var mycanvas = document.getElementById('canvas');
-    var ctx = mycanvas.getContext('2d');
-    var snakeSize = 10;
-    var w = 350;
-    var h = 350;
-    var score = 0;
-    var snake;
-    var snakeSize = 10;
-    var food;
-    // Module pattern
-    var drawModule = (function () {
-        var bodySnake = function(x, y) {
-            // This is the single square
-            ctx.fillStyle = 'green';
-            ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-            // This is the border of the square
-            ctx.strokeStyle = 'darkgreen';
-            ctx.strokeRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
+    <nav id = "horizontal">
+        <ul>
+            <li><a href = "index.html">Play Snake</a></li>
+            <li><a href = "aboutUS.html">About Gemma Games</a></li>
+        </ul>
+    </nav>
+</div>
+<div id = "snakeCanvas">
+    <!--<canvas width="850" height="850" style="border:1px solid #000000;">
+    </canvas>-->
+    <canvas id="gc" width="900" height="900"></canvas>
+    <script>
+        window.onload=function() {
+            canv=document.getElementById("gc");
+            ctx=canv.getContext("2d");
+            document.addEventListener("keydown",keyPush);
+            setInterval(game,1000/15);
         }
-
-        var pizza = function(x, y) {
-            // This is the border of the pizza
-            ctx.fillStyle = 'yellow';
-            ctx.fillRect(x*snakeSize, y*snakeSize, snakeSize, snakeSize);
-            // This is the single square
-            ctx.fillStyle = 'red';
-            ctx.fillRect(x*snakeSize+1, y*snakeSize+1, snakeSize-2, snakeSize-2);
-        }
-
-        var scoreText = function() {
-            // How many pizzas did the snake eat
-            var score_text = "Score: " + score;
-            ctx.fillStyle = 'blue';
-            ctx.fillText(score_text, 145, h-5);
-        }
-        var drawSnake = function() {
-            // Initially the body of the snake will be formed by 5 squares.
-            var length = 4;
-            snake = [];
-
-            // Using a for loop we push the 5 elements inside the array(squares).
-            // Every element will have x = 0 and the y will take the value of the index.
-            for (var i = length; i>=0; i--) {
-                snake.push({x:i, y:0});
+        px=py=10;
+        gs=tc=20;
+        ax=ay=15;
+        xv=yv=0;
+        trail=[];
+        tail = 5;
+        function game() {
+            px+=xv;
+            py+=yv;
+            if(px<0) {
+                px= tc-1;
             }
-        }
-    var createFood = function() {
-        food = {
-            //Generate random numbers.
-            x: Math.floor((Math.random() * 30) + 1),
-            y: Math.floor((Math.random() * 30) + 1)
-        }
-
-        //Look at the position of the snake's body.
-        for (var i=0; i>snake.length; i++) {
-            var snakeX = snake[i].x;
-            var snakeY = snake[i].y;
-
-            if (food.x===snakeX || food.y === snakeY || food.y === snakeY && food.x===snakeX) {
-                food.x = Math.floor((Math.random() * 30) + 1);
-                food.y = Math.floor((Math.random() * 30) + 1);
+            if(px>tc-1) {
+                px= 0;
             }
+            if(py<0) {
+                py= tc-1;
+            }
+            if(py>tc-1) {
+                py= 0;
+            }
+            ctx.fillStyle="black";
+            ctx.fillRect(0,0,canv.width,canv.height);
+
+            ctx.fillStyle="lime";
+            for(var i=0;i<trail.length;i++) {
+                ctx.fillRect(trail[i].x*gs,trail[i].y*gs,gs-2,gs-2);
+                if(trail[i].x==px && trail[i].y==py) {
+                    tail = 5;
+                }
+            }
+            trail.push({x:px,y:py});
+            while(trail.length>tail) {
+                trail.shift();
+            }
+
+            if(ax==px && ay==py) {
+                tail++;
+                ax=Math.floor(Math.random()*tc);
+                ay=Math.floor(Math.random()*tc);
+            }
+            ctx.fillStyle="red";
+            ctx.fillRect(ax*gs,ay*gs,gs-2,gs-2);
         }
-    }
-    var checkCollision = function(x, y, array) {
-        for(var i = 0; i < array.length; i++) {
-            if(array[i].x === x && array[i].y === y)
-                return true;
-        }
-        return false;
-    }
-    var paint = function () {
-        //Let's draw the space in which the snake will move.
-        ctx.fillStyle = 'lightgrey';
-        ctx.fillRect(0, 0, w, h);
-
-        //Give it a border.
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(0, 0, w, h);
-
-        //Disable the button _start_ while you're playing.
-        btn.setAttribute('disabled', true);
-
-        var snakeX = snake[0].x;
-        var snakeY = snake[0].y;
-
-        /*
-        Make the snake move.
-        Use a variable ('direction') to control the movement.
-        To move the snake, pop out the last element of the array and shift it on the top as first element.
-        */
-        if (direction == 'right') {
-            snakeX++;
-        } else if (direction == 'left') {
-            snakeX--;
-        } else if (direction == 'up') {
-            snakeY--;
-        } else if (direction == 'down') {
-            snakeY++;
-        }
-
-        /*
-        If the snake touches the canvas path or itself, it will die!
-        Therefore if x or y of an element of the snake, don't fit inside the canvas, the game will be stopped.
-        If the check_collision is true, it means the the snake has crashed on its body itself, then the game will be stopped again.
-        */
-        if (snakeX == -1 || snakeX == w / snakeSize || snakeY == -1 || snakeY == h / snakeSize || checkCollision(snakeX, snakeY, snake)) {
-            //Stop the game.
-
-            //Make the start button enabled again.
-            btn.removeAttribute('disabled', true);
-
-            //Clean up the canvas.
-            ctx.clearRect(0, 0, w, h);
-            gameloop = clearInterval(gameloop);
-            return;
-        }
-
-        //If the snake eats food it becomes longer and this means that, in this case, you shouldn't pop out the last element of the array.
-        if (snakeX == food.x && snakeY == food.y) {
-            //Create a new square instead of moving the tail.
-            var tail = {
-                x: snakeX,
-                y: snakeY
-            };
-            score++;
-
-            //Create new food.
-            createFood();
-        } else {
-
-            //Pop out the last cell.
-            var tail = snake.pop();
-            tail.x = snakeX;
-            tail.y = snakeY;
-        }
-
-        //Puts the tail as the first cell.
-        snake.unshift(tail);
-
-        //For each element of the array create a square using the bodySnake function we created before.
-        for (var i = 0; i < snake.length; i++) {
-            bodySnake(snake[i].x, snake[i].y);
-        }
-
-        //Create food using the _pizza_ function.
-        pizza(food.x, food.y);
-
-        //Put the score text.
-        scoreText();
-    }
-    var init = function () {
-        direction = 'down';
-        drawSnake();
-        createFood();
-        gameloop = setInterval(paint, 80);
-    }
-
-    //You need to return only the _init_ function at the end of the Module.
-    return {
-        init: init
-    };
-
-    //Close the Module.
-    }());
-    (function (window, document, drawModule, undefined) {
-
-        //Connect the button in the html with the _init_ function.
-        var btn = document.getElementById('btn');
-        btn.addEventListener("click", function () {
-            drawModule.init();
-        });
-
-        document.onkeydown = function (event) {
-
-            keyCode = window.event.keyCode;
-            keyCode = event.keyCode;
-
-            switch (keyCode) {
-
+        function keyPush(evt) {
+            switch(evt.keyCode) {
                 case 37:
-                    if (direction != 'right') {
-                        direction = 'left';
-                    }
-                    console.log('left');
+                    xv=-1;yv=0;
                     break;
-
-                case 39:
-                    if (direction != 'left') {
-                        direction = 'right';
-                        console.log('right');
-                    }
-                    break;
-
                 case 38:
-                    if (direction != 'down') {
-                        direction = 'up';
-                        console.log('up');
-                    }
+                    xv=0;yv=-1;
                     break;
-
+                case 39:
+                    xv=1;yv=0;
+                    break;
                 case 40:
-                    if (direction != 'up') {
-                        direction = 'down';
-                        console.log('down');
-                    }
+                    xv=0;yv=1;
                     break;
             }
         }
-    })(window, document, drawModule);
-</script>
+    </script>
 
+
+    <button id="btn">START</button>
 </div>
 
 </body>
