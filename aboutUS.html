@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoeWmDBZ4aQYdGxOgshpqNvd5m7gfCHzk&callback=initMap"
-            type="text/javascript"></script>
     <!--
         CP 1290 Final Project
         Prepared by: Emma Troke
@@ -15,6 +13,13 @@
 
     <link href = "projectStyle.css" rel = "stylesheet" type = "text/css" />
     <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
+    <script async defer src =
+            "https://maps.googleapis.com/maps/api/js?key=AIzaSyBoeWmDBZ4aQYdGxOgshpqNvd5m7gfCHzk&callback=initMap"
+            type="text/javascript">
+    </script>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="jquery.validate.min.js"></script>
+
 </head>
 <body>
 <div class ="header">
@@ -24,18 +29,17 @@
 
     <nav id = "horizontal">
         <ul>
-            <li><a href = "index.html">Game</a></li>
-            <li><a href = "products.html">About</a></li>
+            <li><a href = "index.html">Play Snake</a></li>
+            <li><a href = "aboutUS.html">About Gemma Games</a></li>
         </ul>
     </nav>
 </div>
 
 <div class = "body">
     <article>
-        <h2>About Gemma Games</h2>
+        <h2>Gemma Games</h2>
 
-
-        <aside id = "disc">
+        <aside id = "desc">
             <p>
                 im an aside
             </p>
@@ -43,28 +47,62 @@
     </article>
 </div>
 
-<section id = "form">
-    <header>
-        <h3>Join our News Letter</h3>
-    </header>
+<section class = "form">
+    <h3>Keep up with us!</h3>
+
+    <form>
+        <fieldset>
+            <label for = "fname">First Name: </label>
+            <input type = "text" id = "fname" name = "fname" />
+
+            <label for = "lname">Last Name: </label>
+            <input type = "text" id = "lname" name = "lname" />
+
+            <label for = "fname">Country: </label>
+            <input type = "text" id = "country" name = "country" />
+
+            <label for = "email">Email: </label>
+            <input type = "text" id = "email" name = "email" />
+
+            <label for = "email2">Verify Email: </label>
+            <input type = "text" id = "email2" name = "emaiil2" />
+        </fieldset>
+    </form>
 
 
 </section>
 <!--AIzaSyBoeWmDBZ4aQYdGxOgshpqNvd5m7gfCHzk-->
-wtf
-<div>
-<!--<iframe
-        width="600"
-        height="450"
-        frameborder="0" style="border:0"
-        src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY
-    &q=Space+Needle,Seattle+WA" allowfullscreen>
-</iframe>-->
+
+<div id = "map">
+    <!--<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+        $(document).ready(function(){
+            var geocoder = new google.maps.Geocoder();
+            var myLatLng = new google.maps.LatLng(33.4936111, -117.1475);
+            var mapOptions = {zoom: 8, center: myLatLng, mapTypeId: google.maps.MapTypeId.ROADMAP}
+            var map = new google.maps.Map($("#map").get(0), mapOptions);
+
+            $("#links a").click(function() {
+                var address = $(this).text();
+                geocoder.geocode({address: address}, function(results) {
+                    new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map
+                    });
+                });
+            });
+        });
+    </script>
+    <!--<iframe
+            width="600"
+            height="450"
+            frameborder="0" style="border:0"
+            src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY
+        &q=Space+Needle,Seattle+WA" allowfullscreen>
+    </iframe>-->
 </div>
 
 
 </body>
-<footer>
-    Gemma Games
-</footer>
 </html>

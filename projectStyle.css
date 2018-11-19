@@ -243,7 +243,11 @@ article > form input.button {width: 5%;
 article > form aside {margin-left: 5%;}
 fieldset {margin: 50px;}
 form fieldset div.spanhead {margin-top: 3%;}
-
+/*map Styles*/
+#map {
+    float: left;
+    width: 500px;
+    height: 400px}
 /* Footer Styles */
 footer {clear: both;
     padding-top: 10px;
