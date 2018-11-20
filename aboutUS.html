@@ -19,7 +19,7 @@
     </script>
     <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
     <script src="jquery.validate.min.js"></script>
-
+    <script src="email_stuff.js"></script>
 </head>
 <body>
 <div class ="header">
@@ -50,7 +50,7 @@
 <section class = "form">
     <h3>Keep up with us!</h3>
 
-    <form>
+    <form id="email_form">
         <fieldset>
             <label for = "fname">First Name: </label>
             <input type = "text" id = "fname" name = "fname" />
@@ -67,6 +67,8 @@
             <label for = "email2">Verify Email: </label>
             <input type = "text" id = "email2" name = "emaiil2" />
         </fieldset>
+        <br><br>
+        <input type="submit" value="Submit">
     </form>
 
 

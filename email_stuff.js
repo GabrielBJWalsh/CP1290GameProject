@@ -31,7 +31,7 @@ $(document).ready(function () {
                 email2: {equalTo: "Email must match previous email."},
 
                 }
-            }
+
         }
     )
 
