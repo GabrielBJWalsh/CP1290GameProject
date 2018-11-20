@@ -29,9 +29,8 @@
     </nav>
 </div>
 <div id = "snakeCanvas">
-    <!--<canvas width="850" height="850" style="border:1px solid #000000;">
-    </canvas>-->
-    <canvas id="gc" width="900" height="900"></canvas>
+
+
     <script>
         window.onload=function() {
             canv=document.getElementById("gc");
@@ -60,10 +59,10 @@
             if(py>tc-1) {
                 py= 0;
             }
-            ctx.fillStyle="black";
+            ctx.fillStyle="rgb(163, 219, 122)";
             ctx.fillRect(0,0,canv.width,canv.height);
 
-            ctx.fillStyle="lime";
+            ctx.fillStyle="purple";
             for(var i=0;i<trail.length;i++) {
                 ctx.fillRect(trail[i].x*gs,trail[i].y*gs,gs-2,gs-2);
                 if(trail[i].x==px && trail[i].y==py) {
@@ -100,10 +99,16 @@
             }
         }
     </script>
+    </canvas>-->
+    <canvas id="gc" width="400" height="400"></canvas>
 
 
     <button id="btn">START</button>
 </div>
+<div id ="slides">
+    <img src="slide1.PNG" alt="baby snake">
 
+
+</div>
 </body>
 </html>

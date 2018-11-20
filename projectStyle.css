@@ -7,7 +7,7 @@
 
 */
 /* HTML Styles*/
-html {background: rgb(188, 216, 243);
+html {background: rgb(50, 52, 61);
     font-family: 'Oxygen', sans-serif;
 }
 /* Layout Styles */
@@ -96,7 +96,7 @@ article span {color: rgb(0, 191, 152);
 
 /* Canvas Styles */
 #snakeCanvas {
-    text-align:center;
+    text-align:left;
 }
 
 canvas {
@@ -131,9 +131,14 @@ article > form input.button {width: 5%;
 }
 /*Syles from main.css */
 #map {
-    float: left;
+    float: right;
     width: 500px;
     height: 400px}
+
+/* Image Styles */
+#slides {
+    text-align: right;
+}
 
 /* Footer Styles */
 /*footer {clear: both;
